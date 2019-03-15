@@ -78,6 +78,22 @@ class azure_dev:
         }
         return self._session.post(url, json=object).json()
 
+    def update_release_definition(self, release_definition, project):
+        """
+            This method will update the release definitions
+        """
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
+        object = { 
+        "artifacts": [], 
+        "comment": "example comment", 
+        "description": "This is my example release ", 
+        "name": "example-python", 
+        "environments": [ { "stage": "stage6" } ], 
+        "variables": ""
+        }
+        return self._session.post(url, json=object).json()
+
+
 
 
 
@@ -86,5 +102,6 @@ with azure_dev(cred) as azure_dev:
     data = azure_dev.get_release(organization, project, releaseId)
     for iter in data['environments']:
         print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
-    data = azure_dev.create_release_definition(organization, project)
+    release_definition=azure_dev.get_release_definition(organization, project, definitionId)    
+    data = azure_dev.update_release_definition(release_definition, project)
     print(data)
