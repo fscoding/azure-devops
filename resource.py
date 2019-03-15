@@ -52,6 +52,14 @@ class azure_dev:
         }
 
         return self._session.post(url, json=object).json()
+    
+    def get_release(self, organization, project, releaseId):
+        """
+            This method will get release definition and return as dictionary
+        """
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
+        return self._session.get(url).json()
+
 
 
 cred = {'username':'', 'password': os.environ.get('AZURE_DEVOPS')}
