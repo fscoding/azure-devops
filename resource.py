@@ -52,8 +52,8 @@ class azure_dev:
         }
 
         return self._session.post(url, json=object).json()
-    
-    def get_release(self, organization, project, releaseId):
+
+    def get_release_definition(self, organization, project, definitionId):
         """
             This method will get release definition and return as dictionary
         """
@@ -67,3 +67,5 @@ with azure_dev(cred) as azure_client:
     data = azure_client.get_release(organization, project, releaseId)
     for iter in data['environments']:
         print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
+    data = azure_client.get_release_definition(organization, project, 6)
+    print(data)
