@@ -9,7 +9,7 @@ organization=os.environ.get('AZURE_ORG')
 project=os.environ.get('AZURE_PROJECT')
 
 ## Get release print out
-releaseId=1583
+releaseId=1617
 url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
 
 class azure_dev:
@@ -38,11 +38,11 @@ class azure_dev:
         return self._session.get(url).json()
 
 
-    def create_release(self, organization, project, description):
+    def update_release_definition(self, organization, project, description):
         """
             This method will create release and return as dictionary.
         """
-        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases?api-version=5.0'
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
         object = { "definitionId": 6,
         "description": description,
         "artifacts": [ { "alias": "Fabrikam.CI", "instanceReference": { "id": "2", "name": None }} ],
@@ -68,7 +68,14 @@ class azure_dev:
         """
 
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
-        object = { "artifacts": [], "comment": "example comment", "description": "This is my example release ", "name": "example-python", "environments": [], "variables": ""}
+        object = { 
+        "artifacts": [], 
+        "comment": "example comment", 
+        "description": "This is my example release ", 
+        "name": "example-python", 
+        "environments": [ { "stage": "stage1", "daysToKeep": 2} ], 
+        "variables": ""
+        }
         return self._session.post(url, json=object).json()
 
 
