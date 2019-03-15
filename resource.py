@@ -10,7 +10,7 @@ project=os.environ.get('AZURE_PROJECT')
 
 ## Get release print out
 releaseId=1583
-url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?ap'
+url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
 
 class azure_dev:
 
@@ -34,7 +34,7 @@ class azure_dev:
         """
             This method will get release and return as dictionary
         """
-        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?ap'
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
         return self._session.get(url).json()
 
 
