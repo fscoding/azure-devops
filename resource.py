@@ -55,4 +55,6 @@ class azure_dev:
 
 cred = {'username':'', 'password': os.environ.get('AZURE_DEVOPS')}
 with azure_dev(cred) as azure_client:
-    print(azure_client.get_release(organization, project, releaseId))
+    data = azure_client.get_release(organization, project, releaseId)
+    for iter in data['environments']:
+        print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
