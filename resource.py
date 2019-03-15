@@ -59,32 +59,25 @@ class azure_dev:
         """
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
         return self._session.get(url).json()
-    
-    
-    
-    def create_release_definition(self, release_definition, project):
+
+
+
+    def create_release_definition(self, organization, project):
         """
             This method will update the release approvers
         """
-        
+
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
-        object = { "artifacts": "",
-            "createdBy": "",
-            "description": "",
-            "name": "",
-            "environments": "",
-            "variables": "",
-            ""
-        }
-        return self._session.post(url).json()    
-    
+        object = { "artifacts": [], "comment": "example comment", "description": "This is my example release ", "name": "example-python", "environments": [], "variables": ""}
+        return self._session.post(url, json=object).json()
+
 
 
 
 cred = {'username':'', 'password': os.environ.get('AZURE_DEVOPS')}
-with azure_dev(cred) as azure_client:
-    data = azure_client.create_release_definition(organization, project, releaseId)
+with azure_dev(cred) as azure_dev:
+    data = azure_dev.get_release(organization, project, releaseId)
     for iter in data['environments']:
         print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
-    data = azure_client.create_release_definition(organization, project, 6)
+    data = azure_dev.create_release_definition(organization, project)
     print(data)
