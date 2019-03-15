@@ -10,7 +10,7 @@ project=os.environ.get('AZURE_PROJECT')
 
 ## Get release print out
 releaseId=1583
-url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?ap'
+url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
 
 class azure_dev:
 
@@ -34,7 +34,7 @@ class azure_dev:
         """
             This method will get release and return as dictionary
         """
-        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?ap'
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
         return self._session.get(url).json()
 
 
@@ -53,9 +53,19 @@ class azure_dev:
 
         return self._session.post(url, json=object).json()
 
+    def get_release_definition(self, organization, project, definitionId):
+        """
+            This method will get release definition and return as dictionary
+        """
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
+        return self._session.get(url).json()
+
+
 
 cred = {'username':'', 'password': os.environ.get('AZURE_DEVOPS')}
 with azure_dev(cred) as azure_client:
     data = azure_client.get_release(organization, project, releaseId)
     for iter in data['environments']:
         print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
+    data = azure_client.get_release_definition(organization, project, 6)
+    print(data)
