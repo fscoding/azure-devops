@@ -74,12 +74,30 @@ class azure_dev:
         object = {"status": status.lower(), "comments": "Good to go!"}
         self._session.patch(url, json=object).json()
 
+    def update_release_definition(self, release_definition, project):
+        """UpdateReleaseDefinition.
+        Update a release definition.
+        :param :class:`<ReleaseDefinition> <azure.devops.v5_0.release.models.ReleaseDefinition>` release_definition: Release definition object to update.
+        :param str project: Project ID or project name
+        :rtype: :class:`<ReleaseDefinition> <azure.devops.v5_0.release.models.ReleaseDefinition>`
+        """
+        
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
+        object = {
+        "artifacts": [],
+        "description": [ "This is my example release " ],
+        "name": [ "example-python" ],
+        "Demand": [ {"name": "slb", "value": "Please define the approvals"} ],
+        "environments": [ { "stage": "stage1", "daysToKeep": 2} ],
 
-def save(data, fileName=None):
+        "variables": {} }
+        return self._session.put(url, json=object).json()
 
-    if fileName:
+    def save(data, fileName=None):
+
+        if fileName:
         with open(fileName + '.json', 'w') as file:
             json.dump(data, file, indent=2)
 
-    with open('data.json', 'w') as file:
+        with open('data.json', 'w') as file:
         json.dump(data, file, indent=2)
