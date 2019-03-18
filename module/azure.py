@@ -88,7 +88,23 @@ class azure_dev:
         "description": [ "This is my example release " ],
         "name": [ "example-python" ],
         "Demand": [ {"name": "slb", "value": "Please define the approvals"} ],
-        "environments": [ { "stage": "stage1", "daysToKeep": 2} ],
+        "environments": [{ "name": "stage1", 
+        "owner": {
+            "displayName": "Daniel Kano",
+            "uniqueName": "Dkano@slb.com"}
+        "postDeployApprovals": {
+            "approvals": [{
+                "isAutomated": False,
+                "isNotificationOn": True,
+                "approver": {
+                    "displayName": "Daniel Kano",
+                    "uniqueName": "Dkano@slb.com"
+                }
+            }]
+        }
+           
+            } ],
+        
 
         "variables": {} }
         return self._session.put(url, json=object).json()
