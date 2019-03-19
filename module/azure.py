@@ -1,5 +1,8 @@
 import requests
 import json
+import os
+import yaml
+
 class azure_dev:
 
     def __init__(self, credentials=None):
@@ -26,14 +29,12 @@ class azure_dev:
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
         return self._session.get(url).json()
 
-
     def getReleaseDefinition(self, organization, project, definitionId):
         """
             This method will get release definition and return as dictionary
         """
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
         return self._session.get(url).json()
-
 
     def createRelease(self, organization, project, definitionId, description=None, tags=None):
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases?api-version=5.0'
@@ -47,25 +48,18 @@ class azure_dev:
             object['tags'] = tags
         return self._session.post(url, json=object).json()
 
-
     def deleteReleaseDefinition(self, organization, project, definitionId):
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
         return self._session.delete(url).json()
 
-    def createReleaseDefinition(self, organization, project):
+    def createReleaseDefinition(self, organization, project, object):
         """
             This method will create release definition
         """
 
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
-        object = {
-        "artifacts": [],
-        "description": "This is my example release ",
-        "name": "example-python",
-        "environments": [ { "stage": "stage1", "daysToKeep": 2} ],
-        "variables": {} }
-        return self._session.post(url, json=object).json()
 
+        return self._session.post(url, json=object).json()
 
     def giveApproval(self, organization, project, approvalId, status, comment=None):
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/approvals/{approvalId}?api-version=5.0'
@@ -75,11 +69,45 @@ class azure_dev:
         self._session.patch(url, json=object).json()
 
 
-def save(data, fileName=None):
+    def update_release_definition(self, organization, project, data=None):
+        """ UpdateReleaseDefinition.
+        """
+        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
+        if data:
+            object = data
+        else:
+            return 'Error you have to give data'
+        return self._session.put(url, json=object).json()
 
+
+def loadYaml(filename):
+    if os.path.isfile(filename):
+        try:
+            return yaml.load(open(filename),  Loader=yaml.FullLoader)
+        except:
+            return 'file does not .yaml'
+    else:
+        return 'File does not exist!'
+
+def saveYaml(filename, data):
+    try:
+        with open(filename, 'w') as file:
+            yaml.dump(data, file)
+    except:
+        return 'file does not .yaml'
+
+def loadJson(filename):
+    if os.path.isfile(filename):
+        try:
+            return json.load(open(filename))
+        except:
+            return 'file does not .json'
+    else:
+        return 'File does not exist!'
+
+def saveJson(data, fileName=None):
     if fileName:
         with open(fileName + '.json', 'w') as file:
             json.dump(data, file, indent=2)
-
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=2)
