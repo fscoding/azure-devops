@@ -1,4 +1,4 @@
-from module.azure import azure_dev, save
+from module.azure import azure_dev, saveJson, loadYaml, loadJson, saveYaml
 import os
 import json
 import math
@@ -17,19 +17,24 @@ with azure_dev(cred) as client:
 
     ## Get all releases and run for loop.
     release = client.getRelease(organization, project, releaseId)
-    save(release, 'release')
+    # saveJson(release, 'release')
 
+    # ## This method will create actual release
+    # createRelease = client.createRelease(organization, project, definitionId)
+    # saveJson(createRelease, 'createdRelease')
+
+    # ## Give approval
+    # reassigned = client.giveApproval(organization, project, 8987, 'reassigned')
+
+    # data = client.createReleaseDefinition(organization, project, data)
 
     for iter in release['environments']:
         print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
 
     ## Get release definition and run for lop
     release_definition = client.getReleaseDefinition(organization, project, definitionId)
-    save(release_definition, 'release_definition')
+    data = loadJson('data.json')
 
-    ## Give approval
-    reassigned = client.giveApproval(organization, project, 8987, 'reassigned')
-
-    ## This method will create actual release
-    createRelease = client.createRelease(organization, project, definitionId)
-    save(createRelease, 'createdRelease')
+    release_definition['environments'].append(data)
+    resp = client.update_release_definition(organization, project, release_definition)
+    print(resp)
