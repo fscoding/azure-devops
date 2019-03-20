@@ -21,7 +21,6 @@ class azure_dev:
             self._session.close()
             self._session = None
 
-
     def getRelease(self, organization, project, releaseId):
         """
             This method will get release and return as dictionary
@@ -52,13 +51,14 @@ class azure_dev:
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions/{definitionId}?api-version=5.0'
         return self._session.delete(url).json()
 
-    def createReleaseDefinition(self, organization, project, object):
+    def createReleaseDefinition(self, organization, project, data):
         """
             This method will create release definition
         """
 
         url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/definitions?api-version=5.0'
-
+        if data:
+            object=data
         return self._session.post(url, json=object).json()
 
     def giveApproval(self, organization, project, approvalId, status, comment=None):
@@ -67,7 +67,6 @@ class azure_dev:
             object = { "status": status.lower(), "comments": comment}
         object = {"status": status.lower(), "comments": "Good to go!"}
         self._session.patch(url, json=object).json()
-
 
     def update_release_definition(self, organization, project, data=None):
         """ UpdateReleaseDefinition.
@@ -78,6 +77,8 @@ class azure_dev:
         else:
             return 'Error you have to give data'
         return self._session.put(url, json=object).json()
+
+
 
 
 def loadYaml(filename):
