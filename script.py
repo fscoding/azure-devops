@@ -35,6 +35,7 @@ with azure_dev(cred) as client:
     release_definition = client.getReleaseDefinition(organization, project, definitionId)
     data = loadJson('data.json')
 
-    release_definition['environments'].append(data)
-    resp = client.update_release_definition(organization, project, release_definition)
-    print(resp)
+    resp = client.update_release_definition(organization, project, data)
+    # resp = client.createReleaseDefinition(organization, project, data)
+    with open('response.json', 'w') as file:
+        json.dump(resp, file, indent=2)
