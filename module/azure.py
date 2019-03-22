@@ -21,12 +21,7 @@ class azure_dev:
             self._session.close()
             self._session = None
 
-    def getRelease(self, organization, project, releaseId):
-        """
-            This method will get release and return as dictionary
-        """
-        url = f'https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=5.0'
-        return self._session.get(url).json()
+         
 
     def getReleaseDefinition(self, organization, project, definitionId):
         """

@@ -16,7 +16,6 @@ cred = {'username': '', 'password': os.environ.get('AZURE_DEVOPS')}
 with azure_dev(cred) as client:
 
     ## Get all releases and run for loop.
-    release = client.getRelease(organization, project, releaseId)
     # saveJson(release, 'release')
 
     # ## This method will create actual release
@@ -27,9 +26,6 @@ with azure_dev(cred) as client:
     # reassigned = client.giveApproval(organization, project, 8987, 'reassigned')
 
     # data = client.createReleaseDefinition(organization, project, data)
-
-    for iter in release['environments']:
-        print(f'ID :{str(iter["id"])}  Name: { iter["name"] } Status {iter["status"]}')
 
     # resp = client.createReleaseDefinition(organization, project, data)
     ## Get release definition and run for lop
