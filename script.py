@@ -12,7 +12,7 @@ project=os.environ.get('AZURE_PROJECT')
 releaseId = 1583
 definitionId = 6
 
-cred = {'username':'', 'password': os.environ.get('AZURE_DEVOPS')}
+cred = {'username': '', 'password': os.environ.get('AZURE_DEVOPS')}
 with azure_dev(cred) as client:
 
     ## Get all releases and run for loop.
@@ -29,13 +29,35 @@ with azure_dev(cred) as client:
     # data = client.createReleaseDefinition(organization, project, data)
 
     for iter in release['environments']:
-        print(f'ID :{str(iter["id"])}  Name: {iter["name"]} Status {iter["status"]}')
+        print(f'ID :{str(iter["id"])}  Name: { iter["name"] } Status {iter["status"]}')
 
+    # resp = client.createReleaseDefinition(organization, project, data)
     ## Get release definition and run for lop
     release_definition = client.getReleaseDefinition(organization, project, definitionId)
+    saveJson(release_definition, 'data')
+    #
     data = loadJson('data.json')
 
+
+    # for i in data['environments']:
+    #     if 'Stage 1' in i['name']:
+    #         i['name'] = 'Stage fucker'
+
+    # approver = loadJson('approver.json')
+    # for i in data['environments']:
+    #     if 'Stage fucker' in i['name']:
+    #         i['preDeployApprovals']['approvals'].append(approver)
+    #         print(i['preDeployApprovals']['approvals'])
+
+    # Add approval
+    approver = loadJson('secondapprover.json')
+    for i in data['environments']:
+        if 'Stage fucker' in i['name']:
+            i['postDeployApprovals']['approvals'].append(approver)
+            print(i['postDeployApprovals']['approvals'])
+
+
+
     resp = client.update_release_definition(organization, project, data)
-    # resp = client.createReleaseDefinition(organization, project, data)
     with open('response.json', 'w') as file:
         json.dump(resp, file, indent=2)
