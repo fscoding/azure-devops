@@ -37,7 +37,7 @@ with azure_dev(cred) as client:
 
     # for i in data['environments']:
     #     if 'Stage 1' in i['name']:
-    #         i['name'] = 'Stage fucker'
+    #         i['name'] = 'Stage 1'
 
     # approver = loadJson('approver.json')
     # for i in data['environments']:
