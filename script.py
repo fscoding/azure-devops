@@ -41,14 +41,14 @@ with azure_dev(cred) as client:
 
     # approver = loadJson('approver.json')
     # for i in data['environments']:
-    #     if 'Stage fucker' in i['name']:
+    #     if 'Stage 1' in i['name']:
     #         i['preDeployApprovals']['approvals'].append(approver)
     #         print(i['preDeployApprovals']['approvals'])
 
     # Add approval
     approver = loadJson('secondapprover.json')
     for i in data['environments']:
-        if 'Stage fucker' in i['name']:
+        if 'Stage 1' in i['name']:
             i['postDeployApprovals']['approvals'].append(approver)
             print(i['postDeployApprovals']['approvals'])
 
